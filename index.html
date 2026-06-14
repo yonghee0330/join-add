@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>비북스 파트너 모집 — 남은 12자리</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:   #1a1a1a;
+      --mid:   #5a5a5a;
+      --faint: #d4cfc9;
+      --paper: #f9f7f4;
+      --accent:#2e2e2e;
+      --serif: 'Noto Serif KR', Georgia, serif;
+      --sans:  'Noto Sans KR', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────── */
+    header {
+      padding: 56px 24px 40px;
+      max-width: 560px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--faint);
+    }
+
+    .logo-tag {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(26px, 5vw, 36px);
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -.02em;
+      color: var(--ink);
+    }
+
+    .sub {
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--mid);
+      line-height: 1.8;
+    }
+
+    /* ── SPOTS BLOCK ─────────────────────────────── */
+    .spots {
+      max-width: 560px;
+      margin: 40px auto 0;
+      padding: 0 24px;
+    }
+
+    .spots-label {
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 14px;
+    }
+
+    .spot-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--faint);
+    }
+    .spot-row:first-of-type { border-top: 1px solid var(--faint); }
+
+    .spot-zone {
+      font-family: var(--serif);
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 36px;
+      color: var(--ink);
+    }
+
+    .spot-desc {
+      font-size: 12px;
+      color: var(--mid);
+      flex: 1;
+    }
+
+    .spot-nums {
+      font-size: 12px;
+      color: var(--ink);
+      letter-spacing: .04em;
+    }
+
+    /* ── PRICING ─────────────────────────────────── */
+    .pricing {
+      max-width: 560px;
+      margin: 36px auto 0;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .price-main {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .price-detail {
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.7;
+    }
+
+    .price-original {
+      text-decoration: line-through;
+      color: var(--faint);
+    }
+
+    /* ── FORM ────────────────────────────────────── */
+    .form-wrap {
+      max-width: 560px;
+      margin: 56px auto 80px;
+      padding: 0 24px;
+    }
+
+    .form-title {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 32px;
+      color: var(--ink);
+    }
+
+    .field {
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 8px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid var(--faint);
+      border-radius: 0;
+      padding: 8px 0;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-bottom-color: var(--ink);
+    }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a5a5a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 4px center;
+      padding-right: 24px;
+    }
+
+    textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    ::placeholder { color: #bbb; }
+
+    .btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 16px 40px;
+      background: var(--ink);
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 14px;
+      letter-spacing: .06em;
+      border: none;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn:hover { background: #333; }
+    .btn:disabled { background: #aaa; cursor: not-allowed; }
+
+    /* ── STATUS ──────────────────────────────────── */
+    #status {
+      margin-top: 18px;
+      font-size: 13px;
+      min-height: 20px;
+      color: var(--mid);
+    }
+    #status.ok  { color: #2a6e3f; }
+    #status.err { color: #b03030; }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--faint);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    @media (max-width: 480px) {
+      .pricing { flex-direction: column; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ───────────────────────────────────── -->
+<header>
+  <p class="logo-tag">b.books — 0.1평 서점</p>
+  <h1>남은 12자리,<br>함께할 서점주를 찾습니다.</h1>
+  <p class="sub">
+    비북스는 104개 서가 중 이미 91개가 채워졌습니다.<br>
+    마지막 12자리를 잘 운영해줄 파트너를 모십니다.
+  </p>
+</header>
+
+<!-- ── SPOTS ─────────────────────────────────────── -->
+<section class="spots">
+  <p class="spots-label">남은 서가</p>
+
+  <div class="spot-row">
+    <span class="spot-zone">A동</span>
+    <span class="spot-desc">입구 맞이 서가 · 2칸 · 주목도 높음</span>
+    <span class="spot-nums">1, 4, 13호 — 3자리</span>
+  </div>
+  <div class="spot-row">
+    <span class="spot-zone">B동</span>
+    <span class="spot-desc">매장 안쪽 메인 서가 · 2칸</span>
+    <span class="spot-nums">19, 69호 — 2자리</span>
+  </div>
+  <div class="spot-row">
+    <span class="spot-zone">C동</span>
+    <span class="spot-desc">계단 위 서가 · 3칸 · 넉넉한 공간</span>
+    <span class="spot-nums">74, 80, 82, 84, 85, 88, 90호 — 7자리</span>
+  </div>
+</section>
+
+<!-- ── PRICING ──────────────────────────────────── -->
+<section class="pricing">
+  <div class="price-main">15만원</div>
+  <div class="price-detail">
+    <span class="price-original">연 20만원</span> → 10개월 특가<br>
+    7월 정식 운영 · 6월은 가오픈(준비기간)
+  </div>
+</section>
+
+<!-- ── FORM ─────────────────────────────────────── -->
+<section class="form-wrap">
+  <p class="form-title">신청하기</p>
+
+  <form id="applyForm">
+
+    <div class="field">
+      <label for="name">성함 (또는 닉네임) <span style="color:#c00">*</span></label>
+      <input id="name" name="name" type="text" placeholder="홍길동" required />
+    </div>
+
+    <div class="field">
+      <label for="phone">연락처 <span style="color:#c00">*</span></label>
+      <input id="phone" name="phone" type="tel" placeholder="010-0000-0000" required />
+    </div>
+
+    <div class="field">
+      <label for="spot">희망 서가 <span style="color:#c00">*</span></label>
+      <select id="spot" name="spot" required>
+        <option value="">선택해주세요</option>
+        <optgroup label="A동 (입구 맞이 서가 · 2칸)">
+          <option>A동 1호</option>
+          <option>A동 4호</option>
+          <option>A동 13호</option>
+        </optgroup>
+        <optgroup label="B동 (안쪽 메인 서가 · 2칸)">
+          <option>B동 19호</option>
+          <option>B동 69호</option>
+        </optgroup>
+        <optgroup label="C동 (계단 위 서가 · 3칸)">
+          <option>C동 74호</option>
+          <option>C동 80호</option>
+          <option>C동 82호</option>
+          <option>C동 84호</option>
+          <option>C동 85호</option>
+          <option>C동 88호</option>
+          <option>C동 90호</option>
+        </optgroup>
+        <option value="무관 (추천 받겠습니다)">무관 (추천 받겠습니다)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="concept">어떤 서점을 만들고 싶으신가요? <span style="color:#c00">*</span></label>
+      <textarea id="concept" name="concept" placeholder="큐레이션 방향이나 서점 컨셉을 간단히 적어주세요." required></textarea>
+    </div>
+
+    <button class="btn" id="submitBtn" type="submit">신청하기</button>
+    <p id="status"></p>
+
+  </form>
+</section>
+
+<footer>
+  비북스 b.books &nbsp;·&nbsp; 문의: 카카오채널
+</footer>
+
+<script>
+  // ──────────────────────────────────────────────────────────────────
+  // 구글 Apps Script 웹앱 URL을 아래에 붙여넣으세요.
+  // 설정 방법: 이 파일 하단의 [구글 시트 연동 설정법] 주석을 참고하세요.
+  // ──────────────────────────────────────────────────────────────────
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby14wZ9xnzHVJh-U0-0bYoGQoOxXVUBRLPGsfY76MT8rbp7E0oghd5ne1mzsqJFfWWP/exec";
+
+  const form   = document.getElementById("applyForm");
+  const btn    = document.getElementById("submitBtn");
+  const status = document.getElementById("status");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      timestamp: new Date().toLocaleString("ko-KR"),
+      name:    document.getElementById("name").value.trim(),
+      phone:   document.getElementById("phone").value.trim(),
+      spot:    document.getElementById("spot").value,
+      concept: document.getElementById("concept").value.trim(),
+    };
+
+    btn.disabled = true;
+    btn.textContent = "전송 중…";
+    status.className = "";
+    status.textContent = "";
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      // no-cors 모드에서는 응답 내용 확인 불가 → 성공으로 처리
+      status.className = "ok";
+      status.textContent = "신청이 접수됐습니다. 곧 연락드리겠습니다 :)";
+      form.reset();
+    } catch (err) {
+      status.className = "err";
+      status.textContent = "전송에 실패했습니다. 잠시 후 다시 시도해주세요.";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "신청하기";
+    }
+  });
+</script>
+
+<!--
+══════════════════════════════════════════════════════
+  구글 시트 연동 설정법 (Apps Script)
+══════════════════════════════════════════════════════
+
+1. 구글 시트를 새로 만들고 아래 컬럼을 1행에 추가하세요:
+   A: 타임스탬프  B: 성함  C: 연락처  D: 희망서가  E: 서점컨셉
+
+2. 상단 메뉴 → 확장 프로그램 → Apps Script 열기
+
+3. 아래 코드를 붙여넣고 저장하세요:
+
+────────────────────────────────────
+function doPost(e) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const data  = JSON.parse(e.postData.contents);
+  sheet.appendRow([
+    data.timestamp,
+    data.name,
+    data.phone,
+    data.spot,
+    data.concept,
+  ]);
+  return ContentService
+    .createTextOutput(JSON.stringify({ result: "success" }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+────────────────────────────────────
+
+4. 배포 → 새 배포 → 유형: 웹 앱
+   - 다음 사용자로 실행: 나 (본인)
+   - 액세스 권한: 모든 사용자
+   → 배포 후 나오는 URL을 복사
+
+5. 이 HTML 파일의 APPS_SCRIPT_URL 변수에 붙여넣으세요.
+══════════════════════════════════════════════════════
+-->
+
+</body>
+</html>
