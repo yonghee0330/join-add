@@ -83,6 +83,118 @@
       line-height: 1.8;
     }
 
+    .guide-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 11px 20px;
+      border: 1px solid var(--faint);
+      background: #fff;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .02em;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+
+    .guide-btn:hover {
+      border-color: var(--ink);
+      background: #faf8f5;
+    }
+
+    /* ── GUIDE MODAL ─────────────────────────────── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal.is-open {
+      display: flex;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 26, 26, .45);
+    }
+
+    .modal-panel {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      max-height: min(80vh, 640px);
+      overflow-y: auto;
+      background: var(--paper);
+      border: 1px solid var(--faint);
+      padding: 32px 28px 28px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: var(--mid);
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      transition: color .2s;
+    }
+
+    .modal-close:hover {
+      color: var(--ink);
+    }
+
+    .modal-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      padding-right: 28px;
+      color: var(--ink);
+    }
+
+    .guide-section {
+      margin-bottom: 22px;
+    }
+
+    .guide-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .guide-section h3 {
+      font-family: var(--serif);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .guide-section p,
+    .guide-section li {
+      font-size: 13px;
+      color: var(--mid);
+      line-height: 1.75;
+    }
+
+    .guide-section ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .guide-section li + li {
+      margin-top: 4px;
+    }
+
     /* ── SPOTS BLOCK ─────────────────────────────── */
     .spots {
       max-width: 560px;
@@ -500,11 +612,48 @@
   <p class="logo-tag">b.books — 0.1평 서점</p>
   <a class="brand-btn" href="https://bbooks.co.kr" target="_blank" rel="noopener noreferrer">비북스 브랜드 페이지 보기</a>
   <h1>남은 <span id="remainingCount">12</span>자리,<br>함께할 서점주를 찾습니다.</h1>
+  <button type="button" class="guide-btn" id="guideBtn">b.books 이용 가이드</button>
   <p class="sub">
     비북스는 104개 서가 중 이미 <span id="filledCount">92</span>개가 채워졌습니다.<br>
     마지막 <span id="heroRemaining">12</span>자리를 잘 운영해줄 파트너를 모십니다.
   </p>
 </header>
+
+<div class="modal" id="guideModal" aria-hidden="true">
+  <div class="modal-backdrop" id="guideBackdrop"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+    <button type="button" class="modal-close" id="guideClose" aria-label="닫기">×</button>
+    <h2 class="modal-title" id="guideTitle">b.books 이용 안내</h2>
+
+    <div class="guide-section">
+      <h3>1. 추가 점주 입점 안내</h3>
+      <ul>
+        <li><strong>6/15 ~ 30</strong> — 추가 모집 (12개 서가) 및 입점·세팅 기간</li>
+        <li><strong>7/1 (수)</strong> — 추가 점주 공식 오픈</li>
+      </ul>
+    </div>
+
+    <div class="guide-section">
+      <h3>2. 서가 구성</h3>
+      <p>각 점주의 큐레이션이 담긴 서가를 구성해 주세요. 새책, 헌책, 열람용, 굿즈 등 자유롭게 채울 수 있습니다. 기본 세팅(거치대, 미니 북앤드) 외에 가진 재료로 서가를 꾸밀 수 있습니다.</p>
+    </div>
+
+    <div class="guide-section">
+      <h3>3. 수익 배분</h3>
+      <ul>
+        <li>판매 후 <strong>매월 말 정산</strong></li>
+        <li>새책 <strong>10%</strong>, 중고책·굿즈 <strong>15%</strong> 수수료 제외 후 정산</li>
+        <li>비북스 도매처로 새책 주문 가능 (정가의 80%로 구입 → 정산 시 전액 정산)</li>
+        <li>월말 정산액은 각 점주 토스 포스 계정에 포인트로 적립 (송금·구입 가능)</li>
+      </ul>
+    </div>
+
+    <div class="guide-section">
+      <h3>4. 문의</h3>
+      <p>기타 문의는 <strong>써든리 &amp; 호세 매니저</strong>에게 연락해 주세요.</p>
+    </div>
+  </div>
+</div>
 
 <!-- ── SPOTS ─────────────────────────────────────── -->
 <section class="spots">
@@ -855,6 +1004,31 @@
 
   loadTakenSpots();
   setInterval(loadTakenSpots, 30000);
+
+  // ── 이용 가이드 팝업 ─────────────────────────────────────────────
+  const guideModal    = document.getElementById("guideModal");
+  const guideBtn      = document.getElementById("guideBtn");
+  const guideClose    = document.getElementById("guideClose");
+  const guideBackdrop = document.getElementById("guideBackdrop");
+
+  function openGuide() {
+    guideModal.classList.add("is-open");
+    guideModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeGuide() {
+    guideModal.classList.remove("is-open");
+    guideModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  guideBtn.addEventListener("click", openGuide);
+  guideClose.addEventListener("click", closeGuide);
+  guideBackdrop.addEventListener("click", closeGuide);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && guideModal.classList.contains("is-open")) closeGuide();
+  });
 
   // ── 서가 위치 슬라이더 ───────────────────────────────────────────
   const shelfSlider = document.getElementById("shelfSlider");
