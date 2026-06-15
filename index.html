@@ -113,13 +113,17 @@
     }
 
     .spot-num.taken::after {
-      content: " (신청완료)";
+      content: " (마감)";
       text-decoration: none;
       font-size: 11px;
       color: #b03030;
     }
 
     select option:disabled {
+      color: #aaa;
+    }
+
+    select option.taken-option {
       color: #aaa;
     }
 
@@ -297,13 +301,35 @@
       border-color: var(--ink);
     }
 
-    .deposit-check-card input[type="checkbox"] {
-      width: 24px;
-      height: 24px;
+    .deposit-check-card input[type="checkbox"],
+    #depositConfirmed {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
       margin-top: 2px;
       flex-shrink: 0;
-      accent-color: var(--ink);
+      border: 2px solid var(--ink);
+      border-radius: 0;
+      background: #fff;
       cursor: pointer;
+      position: relative;
+    }
+
+    #depositConfirmed:checked {
+      background-color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    #depositConfirmed:checked::after {
+      content: "✓";
+      color: #fff;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      line-height: 1;
     }
 
     .deposit-check-text {
@@ -638,7 +664,8 @@
       const label = opt.dataset.label || opt.value;
       const taken = takenSpots.has(opt.value);
       opt.disabled = taken;
-      opt.textContent = taken ? `${label} (신청완료)` : label;
+      opt.classList.toggle("taken-option", taken);
+      opt.textContent = taken ? `${label} (마감)` : label;
     });
 
     if (spotSelect.value && spotSelect.value !== ANY_SPOT && takenSpots.has(spotSelect.value)) {
@@ -679,13 +706,15 @@
     const spot = spotSelect.value;
     if (spot && spot !== ANY_SPOT && takenSpots.has(spot)) {
       status.className = "err";
-      status.textContent = "이미 신청완료된 서가입니다. 다른 서가를 선택해주세요.";
+      status.textContent = "이미 신청된 호수입니다. 다른 호수를 선택해주세요.";
+      alert("이미 신청된 호수입니다. 다른 호수를 선택해주세요.");
       return;
     }
 
     if (!document.getElementById("depositConfirmed").checked) {
       status.className = "err";
-      status.textContent = "입금 확인에 체크해주세요.";
+      status.textContent = "입금 확인 체크박스를 체크해주세요.";
+      alert("입금 확인 체크박스를 체크해주세요.");
       return;
     }
 
@@ -714,6 +743,7 @@
       if (json.result !== "success") {
         status.className = "err";
         status.textContent = json.message || "전송에 실패했습니다. 잠시 후 다시 시도해주세요.";
+        if (json.message) alert(json.message);
         if (json.takenSpots) {
           takenSpots = new Set(json.takenSpots);
           applyTakenSpotsUI();
@@ -831,7 +861,7 @@ function doPost(e) {
       return ContentService
         .createTextOutput(JSON.stringify({
           result: "error",
-          message: "이미 신청완료된 서가입니다.",
+          message: "이미 신청된 호수입니다. 다른 호수를 선택해주세요.",
           takenSpots: taken,
         }))
         .setMimeType(ContentService.MimeType.JSON);
