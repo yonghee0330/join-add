@@ -107,6 +107,127 @@
       letter-spacing: .04em;
     }
 
+    .spot-num.taken {
+      color: #aaa;
+      text-decoration: line-through;
+    }
+
+    .spot-num.taken::after {
+      content: " (신청완료)";
+      text-decoration: none;
+      font-size: 11px;
+      color: #b03030;
+    }
+
+    select option:disabled {
+      color: #aaa;
+    }
+
+    /* ── SHELF SLIDER ────────────────────────────── */
+    .shelf-gallery {
+      max-width: 560px;
+      margin: 40px auto 0;
+      padding: 0 24px;
+    }
+
+    .shelf-gallery-label {
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 14px;
+    }
+
+    .slider {
+      position: relative;
+      border: 1px solid var(--faint);
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform .35s ease;
+    }
+
+    .slider-slide {
+      min-width: 100%;
+      flex-shrink: 0;
+    }
+
+    .slider-slide img {
+      display: block;
+      width: 100%;
+      height: auto;
+      vertical-align: top;
+    }
+
+    .slider-caption {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--mid);
+      border-top: 1px solid var(--faint);
+      line-height: 1.6;
+    }
+
+    .slider-caption strong {
+      font-family: var(--serif);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--faint);
+      background: rgba(255,255,255,.92);
+      color: var(--ink);
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      z-index: 1;
+    }
+
+    .slider-btn:hover {
+      border-color: var(--ink);
+      background: #fff;
+    }
+
+    .slider-btn:disabled {
+      opacity: .35;
+      cursor: not-allowed;
+    }
+
+    .slider-prev { left: 8px; }
+    .slider-next { right: 8px; }
+
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 0 4px;
+    }
+
+    .slider-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: none;
+      background: var(--faint);
+      cursor: pointer;
+      padding: 0;
+      transition: background .2s, transform .2s;
+    }
+
+    .slider-dot.active {
+      background: var(--ink);
+      transform: scale(1.15);
+    }
+
     /* ── PRICING ─────────────────────────────────── */
     .pricing {
       max-width: 560px;
@@ -133,6 +254,38 @@
     .price-original {
       text-decoration: line-through;
       color: var(--faint);
+    }
+
+    .checkbox-field {
+      margin-bottom: 28px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--ink);
+      cursor: pointer;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      flex-shrink: 0;
+      accent-color: var(--ink);
+      cursor: pointer;
+    }
+
+    .checkbox-hint {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.6;
     }
 
     /* ── FORM ────────────────────────────────────── */
@@ -255,21 +408,56 @@
 <section class="spots">
   <p class="spots-label">남은 서가</p>
 
-  <div class="spot-row">
+  <div class="spot-row" data-zone="A동">
     <span class="spot-zone">A동</span>
     <span class="spot-desc">입구 맞이 서가 · 2칸 · 주목도 높음</span>
-    <span class="spot-nums">1, 4, 13호 — 3자리</span>
+    <span class="spot-nums" data-nums="1,4,13"></span>
   </div>
-  <div class="spot-row">
+  <div class="spot-row" data-zone="B동">
     <span class="spot-zone">B동</span>
     <span class="spot-desc">매장 안쪽 메인 서가 · 2칸</span>
-    <span class="spot-nums">19, 69호 — 2자리</span>
+    <span class="spot-nums" data-nums="19,69"></span>
   </div>
-  <div class="spot-row">
+  <div class="spot-row" data-zone="C동">
     <span class="spot-zone">C동</span>
     <span class="spot-desc">계단 위 서가 · 3칸 · 넉넉한 공간</span>
-    <span class="spot-nums">74, 80, 82, 84, 85, 88, 90호 — 7자리</span>
+    <span class="spot-nums" data-nums="74,80,82,84,85,88,90"></span>
   </div>
+</section>
+
+<!-- ── SHELF GALLERY ────────────────────────────── -->
+<section class="shelf-gallery">
+  <p class="shelf-gallery-label">서가 위치 안내</p>
+
+  <div class="slider" id="shelfSlider">
+    <div class="slider-track" id="sliderTrack">
+      <div class="slider-slide">
+        <img src="images/shelf-a-dong.png" alt="A동 서가 위치 — 1호, 4호, 13호" loading="lazy" />
+        <p class="slider-caption"><strong>A동</strong> · 입구 맞이 서가 · 1호, 4호, 13호 (직렬 2칸)</p>
+      </div>
+      <div class="slider-slide">
+        <img src="images/shelf-b-19.png" alt="B동 19호 서가 위치" loading="lazy" />
+        <p class="slider-caption"><strong>B동 19호</strong> · 매장 안쪽 메인 서가 (직렬 2칸)</p>
+      </div>
+      <div class="slider-slide">
+        <img src="images/shelf-b-69.png" alt="B동 69호 서가 위치" loading="lazy" />
+        <p class="slider-caption"><strong>B동 69호</strong> · 매장 안쪽 메인 서가 (직렬 2칸)</p>
+      </div>
+      <div class="slider-slide">
+        <img src="images/shelf-c-dong-1.png" alt="C동 서가 위치 — 74호, 88호" loading="lazy" />
+        <p class="slider-caption"><strong>C동</strong> · 계단 위 서가 · 74호, 88호 (직렬 3칸)</p>
+      </div>
+      <div class="slider-slide">
+        <img src="images/shelf-c-dong-2.png" alt="C동 서가 위치 — 88호, 90호" loading="lazy" />
+        <p class="slider-caption"><strong>C동</strong> · 계단 위 서가 · 88호, 90호 (직렬 3칸)</p>
+      </div>
+    </div>
+
+    <button type="button" class="slider-btn slider-prev" id="sliderPrev" aria-label="이전 사진">‹</button>
+    <button type="button" class="slider-btn slider-next" id="sliderNext" aria-label="다음 사진">›</button>
+  </div>
+
+  <div class="slider-dots" id="sliderDots"></div>
 </section>
 
 <!-- ── PRICING ──────────────────────────────────── -->
@@ -302,22 +490,22 @@
       <select id="spot" name="spot" required>
         <option value="">선택해주세요</option>
         <optgroup label="A동 (입구 맞이 서가 · 2칸)">
-          <option>A동 1호</option>
-          <option>A동 4호</option>
-          <option>A동 13호</option>
+          <option value="A동 1호">A동 1호</option>
+          <option value="A동 4호">A동 4호</option>
+          <option value="A동 13호">A동 13호</option>
         </optgroup>
         <optgroup label="B동 (안쪽 메인 서가 · 2칸)">
-          <option>B동 19호</option>
-          <option>B동 69호</option>
+          <option value="B동 19호">B동 19호</option>
+          <option value="B동 69호">B동 69호</option>
         </optgroup>
         <optgroup label="C동 (계단 위 서가 · 3칸)">
-          <option>C동 74호</option>
-          <option>C동 80호</option>
-          <option>C동 82호</option>
-          <option>C동 84호</option>
-          <option>C동 85호</option>
-          <option>C동 88호</option>
-          <option>C동 90호</option>
+          <option value="C동 74호">C동 74호</option>
+          <option value="C동 80호">C동 80호</option>
+          <option value="C동 82호">C동 82호</option>
+          <option value="C동 84호">C동 84호</option>
+          <option value="C동 85호">C동 85호</option>
+          <option value="C동 88호">C동 88호</option>
+          <option value="C동 90호">C동 90호</option>
         </optgroup>
         <option value="무관 (추천 받겠습니다)">무관 (추천 받겠습니다)</option>
       </select>
@@ -326,6 +514,19 @@
     <div class="field">
       <label for="concept">어떤 서점을 만들고 싶으신가요? <span style="color:#c00">*</span></label>
       <textarea id="concept" name="concept" placeholder="큐레이션 방향이나 서점 컨셉을 간단히 적어주세요." required></textarea>
+    </div>
+
+    <div class="field checkbox-field">
+      <label for="depositConfirmed">입금 안내 <span style="color:#c00">*</span></label>
+      <p class="checkbox-hint" style="margin-top:0;margin-bottom:12px;">
+        입금계좌: 카카오뱅크 7942-33-45474 (예금주 경규환)<br>
+        신청 전 15만원을 위 계좌로 입금해주세요.<br>
+        입금자명은 신청 시 이름과 동일하게 부탁드립니다.
+      </p>
+      <label class="checkbox-label" for="depositConfirmed">
+        <input id="depositConfirmed" name="depositConfirmed" type="checkbox" required />
+        <span>15만원을 입금했으며, 입금자명을 성함과 동일하게 기재했습니다.</span>
+      </label>
     </div>
 
     <button class="btn" id="submitBtn" type="submit">신청하기</button>
@@ -345,19 +546,71 @@
   // ──────────────────────────────────────────────────────────────────
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby14wZ9xnzHVJh-U0-0bYoGQoOxXVUBRLPGsfY76MT8rbp7E0oghd5ne1mzsqJFfWWP/exec";
 
-  const form   = document.getElementById("applyForm");
-  const btn    = document.getElementById("submitBtn");
-  const status = document.getElementById("status");
+  const form       = document.getElementById("applyForm");
+  const btn        = document.getElementById("submitBtn");
+  const status     = document.getElementById("status");
+  const spotSelect = document.getElementById("spot");
+  const ANY_SPOT   = "무관 (추천 받겠습니다)";
+
+  let takenSpots = new Set();
+
+  function applyTakenSpotsUI() {
+    Array.from(spotSelect.options).forEach((opt) => {
+      if (!opt.value || opt.value === ANY_SPOT) return;
+      const taken = takenSpots.has(opt.value);
+      opt.disabled = taken;
+      opt.textContent = taken ? `${opt.value} (신청완료)` : opt.value;
+    });
+
+    document.querySelectorAll(".spot-nums").forEach((el) => {
+      const zone = el.closest(".spot-row").dataset.zone;
+      const nums = el.dataset.nums.split(",");
+      const parts = nums.map((num) => {
+        const label = `${num}호`;
+        const taken = takenSpots.has(`${zone} ${num}호`);
+        return taken
+          ? `<span class="spot-num taken">${label}</span>`
+          : `<span class="spot-num">${label}</span>`;
+      });
+      const available = nums.filter((num) => !takenSpots.has(`${zone} ${num}호`)).length;
+      el.innerHTML = `${parts.join(", ")} — ${available}자리`;
+    });
+  }
+
+  async function loadTakenSpots() {
+    try {
+      const res = await fetch(APPS_SCRIPT_URL);
+      const json = await res.json();
+      takenSpots = new Set(json.takenSpots || []);
+      applyTakenSpotsUI();
+    } catch (err) {
+      console.warn("신청 현황을 불러오지 못했습니다.", err);
+    }
+  }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    const spot = spotSelect.value;
+    if (spot && spot !== ANY_SPOT && takenSpots.has(spot)) {
+      status.className = "err";
+      status.textContent = "이미 신청이 완료된 서가입니다. 다른 서가를 선택해주세요.";
+      return;
+    }
+
+    if (!document.getElementById("depositConfirmed").checked) {
+      status.className = "err";
+      status.textContent = "입금 확인에 체크해주세요.";
+      return;
+    }
 
     const data = {
       timestamp: new Date().toLocaleString("ko-KR"),
       name:    document.getElementById("name").value.trim(),
       phone:   document.getElementById("phone").value.trim(),
-      spot:    document.getElementById("spot").value,
+      spot,
       concept: document.getElementById("concept").value.trim(),
+      depositConfirmed: "예",
     };
 
     btn.disabled = true;
@@ -366,13 +619,26 @@
     status.textContent = "";
 
     try {
-      await fetch(APPS_SCRIPT_URL, {
+      const res = await fetch(APPS_SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      // no-cors 모드에서는 응답 내용 확인 불가 → 성공으로 처리
+      const json = await res.json();
+
+      if (json.result !== "success") {
+        status.className = "err";
+        status.textContent = json.message || "전송에 실패했습니다. 잠시 후 다시 시도해주세요.";
+        if (json.takenSpots) {
+          takenSpots = new Set(json.takenSpots);
+          applyTakenSpotsUI();
+        }
+        return;
+      }
+
+      if (spot && spot !== ANY_SPOT) takenSpots.add(spot);
+      applyTakenSpotsUI();
+
       status.className = "ok";
       status.textContent = "신청이 접수됐습니다. 곧 연락드리겠습니다 :)";
       form.reset();
@@ -384,6 +650,51 @@
       btn.textContent = "신청하기";
     }
   });
+
+  loadTakenSpots();
+
+  // ── 서가 위치 슬라이더 ───────────────────────────────────────────
+  const sliderTrack = document.getElementById("sliderTrack");
+  const sliderPrev  = document.getElementById("sliderPrev");
+  const sliderNext  = document.getElementById("sliderNext");
+  const sliderDots  = document.getElementById("sliderDots");
+  const slides      = sliderTrack.querySelectorAll(".slider-slide");
+  let currentSlide  = 0;
+  let touchStartX   = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "slider-dot" + (i === 0 ? " active" : "");
+    dot.setAttribute("aria-label", `${i + 1}번째 사진`);
+    dot.addEventListener("click", () => goToSlide(i));
+    sliderDots.appendChild(dot);
+  });
+
+  const dots = sliderDots.querySelectorAll(".slider-dot");
+
+  function goToSlide(index) {
+    currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+    sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+    dots.forEach((dot, i) => dot.classList.toggle("active", i === currentSlide));
+    sliderPrev.disabled = currentSlide === 0;
+    sliderNext.disabled = currentSlide === slides.length - 1;
+  }
+
+  sliderPrev.addEventListener("click", () => goToSlide(currentSlide - 1));
+  sliderNext.addEventListener("click", () => goToSlide(currentSlide + 1));
+
+  sliderTrack.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  sliderTrack.addEventListener("touchend", (e) => {
+    const diff = touchStartX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) < 40) return;
+    goToSlide(currentSlide + (diff > 0 ? 1 : -1));
+  }, { passive: true });
+
+  goToSlide(0);
 </script>
 
 <!--
@@ -392,23 +703,59 @@
 ══════════════════════════════════════════════════════
 
 1. 구글 시트를 새로 만들고 아래 컬럼을 1행에 추가하세요:
-   A: 타임스탬프  B: 성함  C: 연락처  D: 희망서가  E: 서점컨셉
+   A: 타임스탬프  B: 성함  C: 연락처  D: 희망서가  E: 서점컨셉  F: 입금확인
 
 2. 상단 메뉴 → 확장 프로그램 → Apps Script 열기
 
 3. 아래 코드를 붙여넣고 저장하세요:
 
 ────────────────────────────────────
-function doPost(e) {
+const ANY_SPOT = "무관 (추천 받겠습니다)";
+
+function getTakenSpots() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const data  = JSON.parse(e.postData.contents);
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+
+  const spots = sheet.getRange(2, 4, lastRow, 4).getValues().flat();
+  return [...new Set(
+    spots.filter((spot) => spot && spot !== ANY_SPOT)
+  )];
+}
+
+function doGet() {
+  return ContentService
+    .createTextOutput(JSON.stringify({ takenSpots: getTakenSpots() }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  const data = JSON.parse(e.postData.contents);
+  const spot = data.spot;
+
+  if (spot && spot !== ANY_SPOT) {
+    const taken = getTakenSpots();
+    if (taken.includes(spot)) {
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          result: "error",
+          message: "이미 신청이 완료된 서가입니다.",
+          takenSpots: taken,
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   sheet.appendRow([
     data.timestamp,
     data.name,
     data.phone,
     data.spot,
     data.concept,
+    data.depositConfirmed || "아니오",
   ]);
+
   return ContentService
     .createTextOutput(JSON.stringify({ result: "success" }))
     .setMimeType(ContentService.MimeType.JSON);
@@ -421,6 +768,11 @@ function doPost(e) {
    → 배포 후 나오는 URL을 복사
 
 5. 이 HTML 파일의 APPS_SCRIPT_URL 변수에 붙여넣으세요.
+
+6. 코드를 수정했다면 배포 → 배포 관리 → 연필 아이콘 → 새 버전으로 다시 배포하세요.
+   (신청 완료 서가 조회·중복 방지·입금확인 기록 기능이 반영됩니다.)
+
+7. 입금 계좌 정보는 신청 폼 하단 '입금 안내' 항목에서 수정하세요.
 ══════════════════════════════════════════════════════
 -->
 
