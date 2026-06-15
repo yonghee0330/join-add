@@ -647,6 +647,32 @@
 
   let takenSpots = new Set();
 
+  // GitHub Pages 등 HTTPS 환경에서 Apps Script CORS 이슈 방지
+  async function gasFetch(url, options = {}) {
+    const res = await fetch(url, {
+      redirect: "follow",
+      ...options,
+      headers: {
+        ...(options.headers || {}),
+      },
+    });
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch (err) {
+      console.warn("Apps Script 응답 파싱 실패:", text.slice(0, 200));
+      return null;
+    }
+  }
+
+  async function gasPost(data) {
+    return gasFetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data),
+    });
+  }
+
   function updateRemainingCounts() {
     const taken = ALL_SPOT_IDS.filter((id) => takenSpots.has(id)).length;
     const remaining = ALL_SPOT_IDS.length - taken;
@@ -691,8 +717,8 @@
 
   async function loadTakenSpots() {
     try {
-      const res = await fetch(APPS_SCRIPT_URL);
-      const json = await res.json();
+      const json = await gasFetch(APPS_SCRIPT_URL);
+      if (!json) return;
       takenSpots = new Set(json.takenSpots || []);
       applyTakenSpotsUI();
     } catch (err) {
@@ -733,14 +759,9 @@
     status.textContent = "";
 
     try {
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const json = await res.json();
+      const json = await gasPost(data);
 
-      if (json.result !== "success") {
+      if (json && json.result !== "success") {
         status.className = "err";
         status.textContent = json.message || "전송에 실패했습니다. 잠시 후 다시 시도해주세요.";
         if (json.message) alert(json.message);
@@ -751,6 +772,20 @@
         return;
       }
 
+      if (!json) {
+        // 응답 파싱 실패 시 시트 반영 여부 재확인
+        await loadTakenSpots();
+        if (spot && spot !== ANY_SPOT && takenSpots.has(spot)) {
+          status.className = "ok";
+          status.textContent = "신청이 접수됐습니다. 곧 연락드리겠습니다 :)";
+          form.reset();
+          return;
+        }
+        status.className = "err";
+        status.textContent = "전송에 실패했습니다. 잠시 후 다시 시도해주세요.";
+        return;
+      }
+
       if (spot && spot !== ANY_SPOT) takenSpots.add(spot);
       applyTakenSpotsUI();
 
@@ -758,6 +793,14 @@
       status.textContent = "신청이 접수됐습니다. 곧 연락드리겠습니다 :)";
       form.reset();
     } catch (err) {
+      console.warn("신청 전송 오류:", err);
+      await loadTakenSpots();
+      if (spot && spot !== ANY_SPOT && takenSpots.has(spot)) {
+        status.className = "ok";
+        status.textContent = "신청이 접수됐습니다. 곧 연락드리겠습니다 :)";
+        form.reset();
+        return;
+      }
       status.className = "err";
       status.textContent = "전송에 실패했습니다. 잠시 후 다시 시도해주세요.";
     } finally {
