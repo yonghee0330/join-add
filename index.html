@@ -113,7 +113,7 @@
     }
 
     .spot-num.taken::after {
-      content: " (입점 완료)";
+      content: " (신청완료)";
       text-decoration: none;
       font-size: 11px;
       color: #b03030;
@@ -274,25 +274,51 @@
       margin-bottom: 28px;
     }
 
-    .checkbox-label {
+    .deposit-check-card {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      font-size: 14px;
-      line-height: 1.65;
-      color: var(--ink);
+      gap: 16px;
+      margin-top: 16px;
+      padding: 20px 18px;
+      border: 2px solid var(--ink);
+      background: #fff;
       cursor: pointer;
+      transition: background .2s, border-color .2s;
       text-transform: none;
       letter-spacing: 0;
     }
 
-    .checkbox-label input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      margin-top: 3px;
+    .deposit-check-card:hover {
+      background: #faf8f5;
+    }
+
+    .deposit-check-card:has(input:checked) {
+      background: #f3efe9;
+      border-color: var(--ink);
+    }
+
+    .deposit-check-card input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      margin-top: 2px;
       flex-shrink: 0;
       accent-color: var(--ink);
       cursor: pointer;
+    }
+
+    .deposit-check-text {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+
+    .deposit-check-text small {
+      display: block;
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--mid);
     }
 
     .checkbox-hint {
@@ -412,16 +438,16 @@
 <!-- ── HEADER ───────────────────────────────────── -->
 <header>
   <p class="logo-tag">b.books — 0.1평 서점</p>
-  <h1>남은 12자리,<br>함께할 서점주를 찾습니다.</h1>
+  <h1>남은 <span id="remainingCount">12</span>자리,<br>함께할 서점주를 찾습니다.</h1>
   <p class="sub">
-    비북스는 104개 서가 중 이미 91개가 채워졌습니다.<br>
-    마지막 12자리를 잘 운영해줄 파트너를 모십니다.
+    비북스는 104개 서가 중 이미 <span id="filledCount">91</span>개가 채워졌습니다.<br>
+    마지막 <span id="heroRemaining">12</span>자리를 잘 운영해줄 파트너를 모십니다.
   </p>
 </header>
 
 <!-- ── SPOTS ─────────────────────────────────────── -->
 <section class="spots">
-  <p class="spots-label">남은 서가</p>
+  <p class="spots-label">남은 서가 · <span id="spotsTotal">12</span>자리</p>
 
   <div class="spot-row" data-zone="A동">
     <span class="spot-zone">A동</span>
@@ -548,9 +574,12 @@
         신청 전 15만원을 위 계좌로 입금해주세요.<br>
         입금자명은 신청 시 이름과 동일하게 부탁드립니다.
       </p>
-      <label class="checkbox-label" for="depositConfirmed">
+      <label class="deposit-check-card" for="depositConfirmed">
         <input id="depositConfirmed" name="depositConfirmed" type="checkbox" required />
-        <span>15만원을 입금했으며, 입금자명을 성함과 동일하게 기재했습니다.</span>
+        <span class="deposit-check-text">
+          15만원을 입금했으며, 입금자명을 성함과 동일하게 기재했습니다.
+          <small>체크 후 신청하기를 눌러주세요. 입금 확인 후 최종 접수됩니다.</small>
+        </span>
       </label>
     </div>
 
@@ -576,15 +605,40 @@
   const status     = document.getElementById("status");
   const spotSelect = document.getElementById("spot");
   const ANY_SPOT   = "무관 (추천 받겠습니다)";
+  const INITIAL_FILLED = 91;
+
+  const ALL_SPOT_IDS = [];
+  document.querySelectorAll(".spot-row").forEach((row) => {
+    const zone = row.dataset.zone;
+    row.querySelector(".spot-nums").dataset.nums.split(",").forEach((num) => {
+      ALL_SPOT_IDS.push(`${zone} ${num}호`);
+    });
+  });
+
+  Array.from(spotSelect.options).forEach((opt) => {
+    if (opt.value && opt.value !== ANY_SPOT) opt.dataset.label = opt.textContent;
+  });
 
   let takenSpots = new Set();
+
+  function updateRemainingCounts() {
+    const taken = ALL_SPOT_IDS.filter((id) => takenSpots.has(id)).length;
+    const remaining = ALL_SPOT_IDS.length - taken;
+
+    document.getElementById("remainingCount").textContent = remaining;
+    document.getElementById("heroRemaining").textContent = remaining;
+    document.getElementById("filledCount").textContent = INITIAL_FILLED + taken;
+    document.getElementById("spotsTotal").textContent = remaining;
+    document.title = `비북스 파트너 모집 — 남은 ${remaining}자리`;
+  }
 
   function applyTakenSpotsUI() {
     Array.from(spotSelect.options).forEach((opt) => {
       if (!opt.value || opt.value === ANY_SPOT) return;
+      const label = opt.dataset.label || opt.value;
       const taken = takenSpots.has(opt.value);
       opt.disabled = taken;
-      opt.textContent = taken ? `${opt.value} (입점 완료)` : opt.value;
+      opt.textContent = taken ? `${label} (신청완료)` : label;
     });
 
     if (spotSelect.value && spotSelect.value !== ANY_SPOT && takenSpots.has(spotSelect.value)) {
@@ -604,6 +658,8 @@
       const available = nums.filter((num) => !takenSpots.has(`${zone} ${num}호`)).length;
       el.innerHTML = `${parts.join(", ")} — ${available}자리`;
     });
+
+    updateRemainingCounts();
   }
 
   async function loadTakenSpots() {
@@ -623,7 +679,7 @@
     const spot = spotSelect.value;
     if (spot && spot !== ANY_SPOT && takenSpots.has(spot)) {
       status.className = "err";
-      status.textContent = "이미 입점 완료된 서가입니다. 다른 서가를 선택해주세요.";
+      status.textContent = "이미 신청완료된 서가입니다. 다른 서가를 선택해주세요.";
       return;
     }
 
@@ -775,7 +831,7 @@ function doPost(e) {
       return ContentService
         .createTextOutput(JSON.stringify({
           result: "error",
-          message: "이미 입점 완료된 서가입니다.",
+          message: "이미 신청완료된 서가입니다.",
           takenSpots: taken,
         }))
         .setMimeType(ContentService.MimeType.JSON);
