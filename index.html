@@ -44,7 +44,27 @@
       letter-spacing: .18em;
       text-transform: uppercase;
       color: var(--mid);
+      margin-bottom: 20px;
+    }
+
+    .brand-btn {
+      display: inline-block;
       margin-bottom: 28px;
+      padding: 11px 20px;
+      border: 1.5px solid var(--ink);
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .02em;
+      text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+
+    .brand-btn:hover {
+      background: var(--ink);
+      color: #fff;
     }
 
     h1 {
@@ -464,9 +484,10 @@
 <!-- ── HEADER ───────────────────────────────────── -->
 <header>
   <p class="logo-tag">b.books — 0.1평 서점</p>
+  <a class="brand-btn" href="https://bbooks.co.kr" target="_blank" rel="noopener noreferrer">비북스 브랜드 페이지 보기</a>
   <h1>남은 <span id="remainingCount">12</span>자리,<br>함께할 서점주를 찾습니다.</h1>
   <p class="sub">
-    비북스는 104개 서가 중 이미 <span id="filledCount">91</span>개가 채워졌습니다.<br>
+    비북스는 104개 서가 중 이미 <span id="filledCount">92</span>개가 채워졌습니다.<br>
     마지막 <span id="heroRemaining">12</span>자리를 잘 운영해줄 파트너를 모십니다.
   </p>
 </header>
@@ -631,7 +652,7 @@
   const status     = document.getElementById("status");
   const spotSelect = document.getElementById("spot");
   const ANY_SPOT   = "무관 (추천 받겠습니다)";
-  const INITIAL_FILLED = 91;
+  const INITIAL_FILLED = 92;
 
   const ALL_SPOT_IDS = [];
   document.querySelectorAll(".spot-row").forEach((row) => {
